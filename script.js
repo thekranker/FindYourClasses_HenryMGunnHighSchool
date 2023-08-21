@@ -116,16 +116,17 @@ scene.background = backgroundTexture;
 
 // City (Default Map)
 var cityTexture;
-loader.load("/3D/city.glb", function(glb) {
+loader.load("/3D/update_city.glb", function(glb) {
     cityTexture = glb.scene;
     cityTexture.scale.set(0.5, 0.5, 0.5);
 
     scene.add(cityTexture);
 
     cityTexture.traverse(function(node) {
-        if (node instanceof THREE.Mesh) {
-            objectsArray.push(node);
-        }
+        objectsArray.push(node);
+        // if (node instanceof THREE.Mesh) {
+        //     objectsArray.push(node);
+        // }
     });
 
     console.log(glb); // console
@@ -367,21 +368,18 @@ exploreButton.addEventListener('click', function() {
 
 
     // -> Navigation Button
+    var mouseDownX;
+    var mouseDownY;
     // const button = document.getElementById("follow-button");
-    let isDragging = false;
 
-    document.addEventListener('pointerdown', () => { // Sets isDragging to false <-
+    document.addEventListener('pointerdown', (event) => { // Logs 'pointerdown' coordinates
         console.log('mousedown!'); // Console
-        isDragging = false;
+        mouseDownX = event.clientX;
+        mouseDownY = event.clientY;
     }); 
-
-    document.addEventListener('pointermove', (e) => { // Sets isDragging to true <-
-        console.log('mousemove!'); // Console
-        isDragging = true;
-    }); 
-
-    document.addEventListener('pointerup', function(event) { // Handles camera movement on click <-
-        if (!isDragging) {
+    
+    document.addEventListener('pointerup', function(event) { // Handles camera movement on click
+        if ( (Math.abs(event.clientX - mouseDownX) <= 5) && (Math.abs(event.clientY - mouseDownY) <= 5) ) {
             var mouseX = event.clientX;
             var mouseY = event.clientY;
 
@@ -390,47 +388,49 @@ exploreButton.addEventListener('click', function() {
             mouse.x = (mouseX / window.innerWidth) * 2 - 1;
             mouse.y = - (mouseY / window.innerHeight) * 2 + 1;
 
-            // 2. Compute the forward direction
-            var forward = new THREE.Vector3(0, 0, -5);
-            forward.applyQuaternion(camera.quaternion);  // Transform to world space
+            // 2. Create a Raycaster
+            var raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
 
-            // 3. Move the camera
-            // camera.position.add(forward);
-            // controls.target.add(forward);
-            // camera.position.y = 1;
-            // controls.target.y = 1;
+            var intersects = raycaster.intersectObjects(objectsArray);
+            console.log(intersects);
+            if (intersects.length > 0) {
+                var intersectPoint = intersects[0].point;
+                console.log("found intersection point");
+                console.log(intersectPoint.x); // This is the 3D coordinate in the world
 
-
-
-            function animateCameraAndControls(targetCameraPosition, targetTargetPosition, duration) {
-                const startPosition = camera.position.clone();
-                const startTarget = controls.target.clone();
-              
-                new TWEEN.Tween({ x: 0 }) // Using an object to hold values for interpolation
-                  .to({ x: 1 }, duration)
-                  .easing(TWEEN.Easing.Quadratic.InOut)
-                  .onUpdate((obj) => {
-                    const t = obj.x;
-                    controls.target.lerpVectors(startTarget, targetTargetPosition, t);
-                    camera.position.lerpVectors(startPosition, targetCameraPosition, t);
-                    camera.position.y = 1;
-                    controls.target.y = 1;
-                    
-                })
-                .start();
-            } 
-
-            const targetCameraPosition = camera.position.clone().add(forward);
-            const targetTargetPosition = controls.target.clone().add(forward);
-            const animationDuration = 250;
+                // 3. Compute the forward direction
+                var forward = new THREE.Vector3(intersectPoint.x - controls.target.x, 0, intersectPoint.z - controls.target.z);
             
-            animateCameraAndControls(targetCameraPosition, targetTargetPosition, animationDuration);
+                // 4. Move the camera
+                function animateCameraAndControls(targetCameraPosition, targetTargetPosition, duration) {
+                    const startPosition = camera.position.clone();
+                    const startTarget = controls.target.clone();
+                
+                    new TWEEN.Tween({ x: 0 }) // Using an object to hold values for interpolation
+                    .to({ x: 1 }, duration)
+                    .easing(TWEEN.Easing.Quadratic.InOut)
+                    .onUpdate((obj) => {
+                        const t = obj.x;
+                        controls.target.lerpVectors(startTarget, targetTargetPosition, t);
+                        camera.position.lerpVectors(startPosition, targetCameraPosition, t);
+                        controls.target.y = 1;
+                        
+                    })
+                    .start();
+                } 
 
-        }
+                const targetCameraPosition = camera.position.clone().add(forward);
+                const targetTargetPosition = controls.target.clone().add(forward);
+                const animationDuration = 250;
+                
+                animateCameraAndControls(targetCameraPosition, targetTargetPosition, animationDuration);
+            }
+        };
     });
 
 
-}); //: explorebutton (click)
+});
 
 
 
@@ -444,7 +444,6 @@ returnHomeButton.addEventListener('click', function() {
     status = statusOptions[0];
     updateHomeScreen();
 });
-
 
 
 

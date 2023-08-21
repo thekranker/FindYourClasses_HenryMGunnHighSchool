@@ -1,0 +1,297 @@
+/* style.css */
+/* DEFAULT SETTINGS -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Body */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Aleo", sans-serif;
+}
+
+/* Fonts */
+@font-face {
+  font-family: 'Aleo';
+  src: url('/fonts/Aleo/static/Aleo-Medium.ttf');
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url('/fonts/Open_Sans/static/OpenSans-SemiBold.ttf');
+}
+
+
+/* Removes blue navigation bar [Orbit Controls] */
+*:focus {
+    outline: none;
+}
+
+/* Canvas Settings */
+.webgl {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* HEADER -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Shadow Bar */
+.shadow-bar {
+  background-color: transparent; 
+  box-shadow: 0px 3px 1000px 150px rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5; /* Make sure it's above other content */
+}
+
+/* Henry M Gunn Title */
+.title p {
+  color: white;
+  z-index: 6; /* Goes above the shadow bar */
+  font-size: 25px;
+  position: fixed;
+  margin-left: 31%;
+  top: 2%;
+}
+.title p:hover { text-decoration: underline; }
+
+/* Gunn Logo/Link */
+.logo img {
+  position: fixed;
+  z-index: 6; 
+  top: 2.5%;
+  left: 0.5%;
+  width: 65px;
+  height: auto;
+}
+
+/* Creators Button Container */
+.creators {
+  position: fixed;
+  display: inline-block;
+  z-index: 6;
+  margin-left: 86%;
+  margin-top: -28.6%;
+}
+.creators:hover .dropdown-content { display: block; }
+.creators:hover .dropdown-button {color: #ff2a1b;}
+
+/* Dropdown Symbol */
+.creators img {
+  position: fixed;
+  z-index: 6; 
+  top: 5.85%;
+  left: 95.5%;
+  width: 25px;
+  height: auto;
+}
+
+/* Creators Dropdown Button */
+.dropdown-button {
+  color: white;
+  background-color: transparent;
+  padding: 16px;
+  font-size: 14px;
+  font-family: "OpenSans", sans-serif;
+  border: none;
+  z-index: 6;
+  transition: transform 0.2s, color 0.2s;
+}
+
+/* Creators Dropdown Content */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 225px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.6);
+  z-index: 7;
+  top: 100%;
+  right: -26%
+}
+
+/* Creators Drop Items Title */
+.dropdown-content p {
+  color: black;
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+  font-style: italic;
+}
+
+/* Creators Dropdown Items */
+.creator-list {
+  color: black;
+  padding: 20px 12px;
+  text-decoration: none;
+  display: block;
+}
+.creator-list:hover {background-color: #ddd;}
+
+
+
+/* SEARCH ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Search Container */
+.search-container {
+  display: flex;
+  position: relative;
+  color: white;
+  background-color: transparent;
+  padding: 5px;
+  z-index: 1;
+  align-items: center;
+  height: 100%;
+}
+
+/* Search Input */
+.searchInput { 
+  z-index: 1;
+  flex: 1;
+  position: relative;
+  visibility: visible;
+  box-shadow: 0px 5px 0px #2b3033;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.searchInput:hover { transform: translateY(3px); box-shadow: 0px 3px 0px #2b3033; }
+
+/* Search Button (Hidden) */
+.searchButton {
+  background-color: white;
+  margin-left: 3px;
+  z-index: 1;
+  display: none;
+  position: relative;
+  visibility: visible;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+/* Search Results */
+.searchResults {
+  z-index: 1;
+  display: block;
+  position: relative;
+  visibility: visible;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  background-color: white;
+}
+
+/* Input (Search Bar) Design */
+input[type="text"] {
+  width: 15.5%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 17px;
+  color: #333;
+}
+
+
+/* Autofill Container */
+.autofill {
+  display: block;
+  flex-direction: column;
+  position: absolute;
+  color: white;
+  background-color: transparent;
+  z-index: 1;
+  /* width: 14.15%; */
+  max-width: 100%;
+}
+
+/* Autofill Suggestions */
+.autofill-suggestion {
+  display: block;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  width: 230px;
+  height: 20px;
+  padding: 12px;
+  font-size: 17px;
+  margin-bottom: 2px;
+}
+.autofill-suggestion:hover { background-color: #f5f5f5; }
+
+
+/* FOOTER ITEMS ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/ 
+
+/* Return Home */
+.return-home-button {
+  display: block;
+  z-index: 6;
+  position: fixed;
+  border: 1px solid white;
+  border-radius: 100px;
+  font-family: "OpenSans", sans-serif;
+  font-size: 17px;
+  padding: 12px 16px;
+  bottom: 1.5%;
+  left: 0.5%;
+  box-shadow: 0px 5px 0px #2b3033;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.return-home-button:hover { transform: translateY(3px); box-shadow: 0px 3px 0px #2b3033; }
+
+/* Classroom not Found */
+.error {
+  font-family: "OpenSans", sans-serif;
+  display: block;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 225px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.6);
+  z-index: 7;
+  top: 80%;
+  left: 33.5%;
+  border: 1px solid white;
+  padding: 6px 20px;
+  border-radius: 100px;
+  background-color: rgba(255, 14, 14, 0.65);
+  font-size: 18px;
+}
+
+/* Explore the Campus */
+.explore-button {
+  display: block;
+  z-index: 6;
+  position: fixed;
+  border: 1px solid white;
+  border-radius: 100px;
+  font-family: "OpenSans", sans-serif;
+  font-size: 17px;
+  padding: 12px 16px;
+  bottom: 1.5%;
+  right: 0.5%;
+  box-shadow: 0px 5px 0px #2b3033;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.explore-button:hover { transform: translateY(3px); box-shadow: 0px 3px 0px #2b3033; }
+
+/* Navigation Button [Explore Campus] */
+/* #follow-button {
+  z-index: 6;
+  position: absolute;
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+}
+#follow-img {
+  width: 125px;
+  height: auto;
+  opacity: 0.7;
+} */
+
+

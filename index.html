@@ -1,0 +1,84 @@
+<!--index.html-->
+<!DOCTYPE html>
+<html>
+    <!---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+    
+    <head> 
+        <!--DEFAULTS-->
+        <title>Find your Classes | Henry M. Gunn High School</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="icon" href="/images/gunn_logo.png" type="image/x-icon">
+        <script src="./script.js" type="module"></script>
+
+        <!--FONTS-->
+        <link href="https://fonts.googleapis.com/css?family=Gayathri&display=swap" rel="stylesheet">
+
+        <!--IMPORTS-->
+        <script src="https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.js"></script> <!--threejs-->
+        <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script> <!--i forgot-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script> <!--GSAP-->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js"></script> <!--GSAP Timeline-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.min.js"></script> <!--tweenjs-->
+    </head>
+
+    <!---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+    
+    <body>
+
+        <!--CANVAS-->
+        <canvas class="webgl"></canvas>
+        
+
+        <!--SCRIPT-->
+        <script type="module" src="/script.js"></script>
+
+
+        <!--HEADER-->
+        <div class="shadow-bar"></div> <!--Shadow Bar-->
+        <a class="title" href="/"> <!--Title-->
+            <p>Find your Classes | Henry M. Gunn High School</p>
+        </a>
+        <a class="logo" href="https://gunn.pausd.org">
+            <img src="/images/gunn_logo.png"></img>
+        </a>
+
+
+        <!--SEARCH-->
+        <div class="search-container" id="search-container">
+            <input type="text" id="searchInput" class="searchInput" placeholder="Search classrooms (ex: N-102)">
+            <button id="searchButton" class="searchButton">Search</button>
+        </div>
+        <div class="autofill" id="autofill">
+            <ul id="search-results" class="search-results"></ul>
+        </div>
+
+
+        <!--CREDITS-->
+        <div class="creators">
+            <button class="dropdown-button">Made by Students</button>
+            <img class="dropdown_symbol" src="/images/dropdown_symbol.png">
+            <div class="dropdown-content">
+                <p>Created in <a href="https://paleyontology.com/capstone/">CS Capstone</a> by:</p>
+                <a class="creator-list" href="https://github.com/thekranker">Karan Kathuria</a>
+                <a class="creator-list">Alex Fisher</a>
+                <a class="creator-list">Ethan Chen</a>
+            </div>
+        </div>
+
+
+        <!--FOOTER-->
+        <div class="error"> <!--Classroom not Found-->
+            <p>Oops! The classroom you searched for does not exist.</p>
+        </div>
+        <div class="return-home"> <!--Return Home-->
+            <button class="return-home-button" id="return-home-button">🏠 Return Home</button>
+        </div>
+        <div class="explore"> <!--Explore the Campus-->
+            <button class="explore-button" id="explore-button">Explore the Campus  🧭</button>
+        </div>
+
+        <!--Navigation [Explore Campus]-->
+        <button id="follow-button"><img src="/images/navigation_arrow.png" id="follow-img"></button> <!--Navigation Button-->
+
+    </body>

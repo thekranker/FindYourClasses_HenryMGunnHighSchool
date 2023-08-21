@@ -1,4 +1,8 @@
 // script.js
+// CREDITS ----------------------------------------------------------------------------------------------------------------------------------------
+
+// "low poly city pack" (https://skfb.ly/oqxNP) by Igor Tretyakov is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
 // IMPORTS ----------------------------------------------------------------------------------------------------------------------------------------
 
 // Default Imports
@@ -360,98 +364,46 @@ exploreButton.addEventListener('click', function() {
     controls.enabled = true;
     updateExploreScreen();
 
-
-
-    
-
-
     // -> Navigation Button
-    const button = document.getElementById("follow-button");
-    let mouseUp = false;
-    let mouseDown = false;
+    // const button = document.getElementById("follow-button");
     let isDragging = false;
 
+    // Pointer pressed down
+    document.addEventListener('pointerdown', () => {
+        console.log('mousedown!'); // Console
+        isDragging = false;
+    }); 
 
-    // // If the mouse is pressed down
-    // document.addEventListener('mousedown', () => {
-    //     console.log('mousedown!'); // Console
-    //     isDragging = false;
-    //     mouseDown = true;
-    // }); //: 'mousedown'
-
-
-
-    // // If the mouse moves 
-    // document.addEventListener('mousemove', (e) => {
-    //     console.log('mousemove!'); // Console
-    //     isDragging = true;
-
-    //     if (isDragging = true) {
-    //     }
-
-    // }); //: 'mousemove'
-
-
-
-    // // When mouse is released
-    // document.addEventListener('mouseup', (event) => {
-    //     console.log('mouseup!');
-
-
-    //     if (isDragging == false) {
-
-    //         var mouseX = event.clientX;
-    //         var mouseY = event.clientY;
-
-    //         // 1. Normalize the 2D screen coordinates
-    //         var mouse = new THREE.Vector2();
-    //         mouse.x = (mouseX / window.innerWidth) * 2 - 1;
-    //         mouse.y = - (mouseY / window.innerHeight) * 2 + 1;
-
-    //         // 2. Create a Raycaster
-    //         var raycaster = new THREE.Raycaster();
-
-    //         // 3. Unproject the normalized 2D coordinates to a 3D point in the world
-    //         raycaster.setFromCamera(mouse, camera);
-
-    //         // 4. Intersect with the desired plane or object
-    //         // If you want to intersect with a specific object or set of objects:
-    //         var intersects = raycaster.intersectObjects(objectsArray);
-    //         if (intersects.length > 0) {
-    //             var intersectPoint = intersects[0].point;
-    //             controls.target.set(intersectPoint.x, 1, intersectPoint.z);
-    //         }
-
-    //     }
-
-    //     isDragging = false;
-    // }); //: 'mouseup'
+    // Pointer moves
+    document.addEventListener('pointermove', (e) => {
+        console.log('mousemove!'); // Console
+        isDragging = true;
+    }); 
 
     
-    document.addEventListener('click', function(event) {
-        var mouseX = event.clientX;
-        var mouseY = event.clientY;
+    // Pointer is released
+    document.addEventListener('pointerup', function(event) {
+        if (!isDragging) {
+            var mouseX = event.clientX;
+            var mouseY = event.clientY;
 
-        // 1. Normalize the 2D screen coordinates
-        var mouse = new THREE.Vector2();
-        mouse.x = (mouseX / window.innerWidth) * 2 - 1;
-        mouse.y = - (mouseY / window.innerHeight) * 2 + 1;
+            // 1. Normalize the 2D screen coordinates
+            var mouse = new THREE.Vector2();
+            mouse.x = (mouseX / window.innerWidth) * 2 - 1;
+            mouse.y = - (mouseY / window.innerHeight) * 2 + 1;
 
-        // 1. Compute the forward direction
-        var forward = new THREE.Vector3(0, 0, -1);
-        forward.applyQuaternion(camera.quaternion);  // Transform to world space
+            // 1. Compute the forward direction
+            var forward = new THREE.Vector3(0, 0, -1);
+            forward.applyQuaternion(camera.quaternion);  // Transform to world space
 
-        // 2. Scale the direction
-        // forward.multiplyScalar(5);
+            // 2. Move the camera
+            camera.position.add(forward);
+            controls.target.add(forward);
+            camera.position.y = 1;
+            controls.target.y = 1;
 
-        // 3. Move the camera
-        camera.position.add(forward);
-        controls.target.add(forward);
-        camera.position.y = 1;
-        controls.target.y = 1;
-
-        console.log("Onclick"); // console
-
+            console.log("Onclick"); // console
+        }
     });
 
 

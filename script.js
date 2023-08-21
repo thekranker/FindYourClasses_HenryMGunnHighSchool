@@ -358,31 +358,29 @@ const returnHomeButton = document.getElementById("return-home-button");
 // Explore button 
 exploreButton.addEventListener('click', function() {
 
+
     // -> Settings 
     controls.target.set(1, 1, -5);
     controls.autoRotate = false;
     controls.enabled = true;
     updateExploreScreen();
 
+
     // -> Navigation Button
     // const button = document.getElementById("follow-button");
     let isDragging = false;
 
-    // Pointer pressed down
-    document.addEventListener('pointerdown', () => {
+    document.addEventListener('pointerdown', () => { // Sets isDragging to false <-
         console.log('mousedown!'); // Console
         isDragging = false;
     }); 
 
-    // Pointer moves
-    document.addEventListener('pointermove', (e) => {
+    document.addEventListener('pointermove', (e) => { // Sets isDragging to true <-
         console.log('mousemove!'); // Console
         isDragging = true;
     }); 
 
-    
-    // Pointer is released
-    document.addEventListener('pointerup', function(event) {
+    document.addEventListener('pointerup', function(event) { // Handles camera movement on click <-
         if (!isDragging) {
             var mouseX = event.clientX;
             var mouseY = event.clientY;
@@ -392,28 +390,47 @@ exploreButton.addEventListener('click', function() {
             mouse.x = (mouseX / window.innerWidth) * 2 - 1;
             mouse.y = - (mouseY / window.innerHeight) * 2 + 1;
 
-            // 1. Compute the forward direction
-            var forward = new THREE.Vector3(0, 0, -1);
+            // 2. Compute the forward direction
+            var forward = new THREE.Vector3(0, 0, -5);
             forward.applyQuaternion(camera.quaternion);  // Transform to world space
 
-            // 2. Move the camera
-            camera.position.add(forward);
-            controls.target.add(forward);
-            camera.position.y = 1;
-            controls.target.y = 1;
+            // 3. Move the camera
+            // camera.position.add(forward);
+            // controls.target.add(forward);
+            // camera.position.y = 1;
+            // controls.target.y = 1;
 
-            console.log("Onclick"); // console
+
+
+            function animateCameraAndControls(targetCameraPosition, targetTargetPosition, duration) {
+                const startPosition = camera.position.clone();
+                const startTarget = controls.target.clone();
+              
+                new TWEEN.Tween({ x: 0 }) // Using an object to hold values for interpolation
+                  .to({ x: 1 }, duration)
+                  .easing(TWEEN.Easing.Quadratic.InOut)
+                  .onUpdate((obj) => {
+                    const t = obj.x;
+                    controls.target.lerpVectors(startTarget, targetTargetPosition, t);
+                    camera.position.lerpVectors(startPosition, targetCameraPosition, t);
+                    camera.position.y = 1;
+                    controls.target.y = 1;
+                    
+                })
+                .start();
+            } 
+
+            const targetCameraPosition = camera.position.clone().add(forward);
+            const targetTargetPosition = controls.target.clone().add(forward);
+            const animationDuration = 250;
+            
+            animateCameraAndControls(targetCameraPosition, targetTargetPosition, animationDuration);
+
         }
     });
 
 
-
-
-
-
-
 }); //: explorebutton (click)
-
 
 
 

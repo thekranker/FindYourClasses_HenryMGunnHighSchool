@@ -278,20 +278,5 @@ input[type="text"] {
 }
 .explore-button:hover { transform: translateY(3px); box-shadow: 0px 3px 0px #2b3033; }
 
-/* Navigation Button [Explore Campus] */
-/* #follow-button {
-  z-index: 6;
-  position: absolute;
-  background-color: transparent;
-  color: white;
-  border: none;
-  cursor: pointer;
-  opacity: 0.7;
-}
-#follow-img {
-  width: 150px;
-  height: auto;
-  opacity: 0.7;
-} */
 
 

@@ -478,8 +478,15 @@ const animate = () => {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(scene.children, true); // calculate intersections
     if (intersects.length > 0) { // update the arrow's position to follow the cursor
+
+        // <-> Position
         const targetPosition = intersects[0].point;
         moveArrow.position.copy(targetPosition);
+
+        // <-> Rotation
+        const direction = new THREE.Vector3().subVectors(camera.position, moveArrow.position);
+        const rotationAngle = Math.atan2(direction.x, direction.z);
+        moveArrow.rotation.y = rotationAngle; // apply rotation to the arrow
     }
 
 

@@ -3,6 +3,7 @@
 
 // "low poly city pack" (https://skfb.ly/oqxNP) by Igor Tretyakov is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+
 // IMPORTS ----------------------------------------------------------------------------------------------------------------------------------------
 
 // Default Imports
@@ -18,22 +19,25 @@ import { GLTFLoader } from 'https://threejsfundamentals.org/threejs/resources/th
 // import { VerticalBlurShader } from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/shaders/VerticalBlurShader.js';
 
 
+
 // SETTINGS / DETAILS ------------------------------------------------------------------------------------------------------------------------------------
 
 // Scene
-const scene = new THREE.Scene();
-const loader = new GLTFLoader();
-const fontLoader = new THREE.FontLoader();
-var objectsArray = [];
+const scene = new THREE.Scene(); // scene
+const loader = new GLTFLoader(); // import 3d models
+const fontLoader = new THREE.FontLoader(); // load fonts
+const raycaster = new THREE.Raycaster(); // move arrow
+const mouse = new THREE.Vector2(); // move arrow
+var objectsArray = []; // for movement on campus
 
 
 // Sizes
-// <-> Window Sizes
+// -> Window Sizes
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight,
 }
-// <-> Window Re-sizing
+// -> Window Re-sizing
 window.addEventListener('resize', () => {
 
     // Update sizes
@@ -51,37 +55,37 @@ window.addEventListener('resize', () => {
 // -> Main Light
 const mainLight = new THREE.PointLight(0xffffff, 1.5, 500);
 mainLight.position.set(100, 100, 100);
-scene.add(mainLight); // Adds the light to the scene <-
+scene.add(mainLight); 
 // -> Background Light
 const bgLight = new THREE.AmbientLight( 0x404040); 
 scene.add(bgLight);
 
 
 // Camera
-const camera = new THREE.PerspectiveCamera( // Camera (FOV, Aspect Ratio) * FOV should never go above 50 [distortion] <-
+const camera = new THREE.PerspectiveCamera( // camera (fov, aspect ratio) * fov should never go above 50 [distortion]
     45, 
     sizes.width / sizes.height
 ); 
 camera.position.z = 100;
-scene.add(camera); // Adds the camera to the scene <-
+scene.add(camera); // adds camera to scene 
 
 
 // Renderer
 const canvas = document.querySelector(".webgl");
 const renderer = new THREE.WebGLRenderer({ canvas });
-renderer.setSize(sizes.width, sizes.height); // Sets the renderer aspect ratio <-
+renderer.setSize(sizes.width, sizes.height); // sets the renderer aspect ratio
 renderer.setPixelRatio(2);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.render(scene, camera); // Renders the scene <-
+renderer.render(scene, camera); // renders the scene
 
 
 // Orbit Controls
-const controls = new OrbitControls(camera, canvas) // Enables the user to rotate the view <-
+const controls = new OrbitControls(camera, canvas) // enables the user to rotate the view
 
 // -> Tilt the Camera [Main View] 
-const tiltAngle = Math.PI / 3; // 60 degrees <-
-const distance = controls.target.distanceTo(camera.position); // Preserve distance to target <-
+const tiltAngle = Math.PI / 3; // 60 degrees 
+const distance = controls.target.distanceTo(camera.position); // preserve distance to target
 const newPosition = camera.position.clone().sub(controls.target).applyAxisAngle(new THREE.Vector3(1, 0, 0), -tiltAngle).add(controls.target);
 camera.position.copy(newPosition);
 controls.target.copy(newPosition);
@@ -102,9 +106,10 @@ controls.rotateSpeed = -0.35;
 controls.autoRotateSpeed = -1;
 
 // Positions
-var defaultPos = [-50, 25, -50] // Starting Position <-
-var ferrisWheelPos = [-27.001, 1, -12]; // Ferris Wheel <-
-var airportPos = [-15, 1, -120]; // Airport <-
+var defaultPos = [-50, 25, -50] // homescreen Position 
+var ferrisWheelPos = [-27.001, 1, -12]; // ferris Wheel
+var airportPos = [-15, 1, -120]; // airport
+
 
 
 // OBJECTS ------------------------------------------------------------------------------------------------------------------------------------
@@ -124,9 +129,6 @@ loader.load("/3D/update_city.glb", function(glb) {
 
     cityTexture.traverse(function(node) {
         objectsArray.push(node);
-        // if (node instanceof THREE.Mesh) {
-        //     objectsArray.push(node);
-        // }
     });
 
     console.log(glb); // console
@@ -174,7 +176,19 @@ fontLoader.load('/fonts/roboto.json', (font) => {
 });
 
 
-// INTERACTIVE MARKERS --------------------------------------------------------------------------------------------------------------------------------------------
+// Move Arrow
+var moveArrow;
+loader.load("/3D/move_arrow.glb", function(glb) {
+    moveArrow = glb.scene;
+    moveArrow.scale.set(0.01, 0.01, 0.01);
+    moveArrow.position.set(0, 0, -10);
+
+    scene.add(moveArrow);
+
+}, function(error) {
+    // Do nothing
+});
+
 
 
 // SEARCH --------------------------------------------------------------------------------------------------------------------------------------------
@@ -287,8 +301,8 @@ searchButton.addEventListener('click', () => {
 });
 
 
-// [Viewing] Home screen display
-function updateHomeScreen() {
+// Displays
+function updateHomeScreen() { // home-screen display
     // -> Search Bar
     document.getElementById('searchInput').style.padding = "12px";
     document.getElementById('searchInput').style.fontSize = "27px";
@@ -303,8 +317,7 @@ function updateHomeScreen() {
     runHomeScreenTimeline();
 }
 
-// [Viewing] Locations screen display
-function updateLocationsScreen() {
+function updateLocationsScreen() { // locations-screen display
     // -> Search Bar
     document.getElementById('searchInput').style.padding = "12px";
     document.getElementById('searchInput').style.fontSize = "17px";
@@ -326,8 +339,7 @@ function updateLocationsScreen() {
     
 }
 
-// [Viewing] Explore screen display
-function updateExploreScreen() {
+function updateExploreScreen() { // explore-screen display
     // -> Search Bar
     document.getElementById('searchInput').style.padding = "12px";
     document.getElementById('searchInput').style.fontSize = "17px";
@@ -359,7 +371,6 @@ const returnHomeButton = document.getElementById("return-home-button");
 // Explore button 
 exploreButton.addEventListener('click', function() {
 
-
     // -> Settings 
     controls.target.set(1, 1, -5);
     controls.autoRotate = false;
@@ -368,17 +379,17 @@ exploreButton.addEventListener('click', function() {
 
 
     // -> Navigation Button
-    var mouseDownX;
-    var mouseDownY;
-    // const button = document.getElementById("follow-button");
+    var mouseDownX; // store x value [ mouse pressed down]
+    var mouseDownY; // store y value [ mouse pressed down]
+    
 
-    document.addEventListener('pointerdown', (event) => { // Logs 'pointerdown' coordinates
-        console.log('mousedown!'); // Console
+    document.addEventListener('pointerdown', (event) => { // logs 'pointerdown' coordinates
+        console.log('mousedown!'); // console
         mouseDownX = event.clientX;
         mouseDownY = event.clientY;
     }); 
     
-    document.addEventListener('pointerup', function(event) { // Handles camera movement on click
+    document.addEventListener('pointerup', function(event) { // handles camera movement [on click]
         if ( (Math.abs(event.clientX - mouseDownX) <= 5) && (Math.abs(event.clientY - mouseDownY) <= 5) ) {
             var mouseX = event.clientX;
             var mouseY = event.clientY;
@@ -393,11 +404,11 @@ exploreButton.addEventListener('click', function() {
             raycaster.setFromCamera(mouse, camera);
 
             var intersects = raycaster.intersectObjects(objectsArray);
-            console.log(intersects);
+            console.log(intersects); // console
             if (intersects.length > 0) {
                 var intersectPoint = intersects[0].point;
                 console.log("found intersection point");
-                console.log(intersectPoint.x); // This is the 3D coordinate in the world
+                console.log(intersectPoint.x); // this is the 3d coordinate in the world
 
                 // 3. Compute the forward direction
                 var forward = new THREE.Vector3(intersectPoint.x - controls.target.x, 0, intersectPoint.z - controls.target.z);
@@ -407,7 +418,7 @@ exploreButton.addEventListener('click', function() {
                     const startPosition = camera.position.clone();
                     const startTarget = controls.target.clone();
                 
-                    new TWEEN.Tween({ x: 0 }) // Using an object to hold values for interpolation
+                    new TWEEN.Tween({ x: 0 }) // using an object to hold values for interpolation
                     .to({ x: 1 }, duration)
                     .easing(TWEEN.Easing.Quadratic.InOut)
                     .onUpdate((obj) => {
@@ -430,6 +441,14 @@ exploreButton.addEventListener('click', function() {
     });
 
 
+
+    // -> Move Arrow
+    window.addEventListener('mousemove', (event) => {
+        // Convert mouse position to normalized device coordinates
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+
 });
 
 
@@ -451,7 +470,18 @@ returnHomeButton.addEventListener('click', function() {
 
 const animate = () => { 
 
-    TWEEN.update(); // Update the Tween.js animations
+    // -> Updates
+    TWEEN.update(); // update the tween.js animations
+
+
+    // -> Move Arrow
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children, true); // calculate intersections
+    if (intersects.length > 0) { // update the arrow's position to follow the cursor
+        const targetPosition = intersects[0].point;
+        moveArrow.position.copy(targetPosition);
+    }
+
 
     // -> Controls
     controls.update();
@@ -461,6 +491,7 @@ const animate = () => {
     window.requestAnimationFrame(animate)
 }
 animate();
+
 
 
 // TIMELINE  ------------------------------------------------------------------------------------------------------------------------------------------------
